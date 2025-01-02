@@ -1,12 +1,12 @@
-const APIURL = 'https://api.github.com/users/'
+let APIURL = 'https://api.github.com/users/'
 
-const form = document.getElementById('form');
-const search = document.getElementById('search');
-const main = document.getElementById('main');
+let form = document.getElementById('form');
+let search = document.getElementById('search');
+let main = document.getElementById('main');
 
-const getUser = async (username) => {
+let getUser = async (username) => {
     try {
-        const response = await axios.get(`${APIURL}${username}`);
+        let response = await axios.get(`${APIURL}${username}`);
         userCard(response.data);
         await getRepos(username);
     } catch (error) {
@@ -14,22 +14,22 @@ const getUser = async (username) => {
     }
 };
 
-const getRepos = async (username) => {
+let getRepos = async (username) => {
     try {
-        const response = await axios.get(`${APIURL}${username}/repos`);
+        let response = await axios.get(`${APIURL}${username}/repos`);
         addRepos(response.data);
     } catch (error) {
         cardError(error, 'No repos found');
     }
 };
 
-const userCard = (user) => {
-    const createCard = `
+let userCard = (user) => {
+    let createCard = `
     <div class= "card">
         <img src="${user.avatar_url}" alt="user-avatar" class="avatar"/>
         <div class="user-info">
             <h2>${user.name || user.name}</h2>
-            <p>${user.bio || 'Biography not available'}</p>
+            <p>${user.bio}</p>
             <ul>
                 <li><strong>${user.followers}</strong>&nbspFollowers</li>
                 <li><strong>${user.following}</strong>&nbspFollowing</li>
@@ -42,11 +42,11 @@ const userCard = (user) => {
     main.innerHTML = createCard;
 };
 
-const addRepos = (repos) => {
-    const cardRepos = document.getElementById('repo');
-    cardRepos.innerHTML = ''; // Clear previous repos
+let addRepos = (repos) => {
+    let cardRepos = document.getElementById('repo');
+    cardRepos.innerHTML = '';
     repos.slice(0, 5).forEach((repo) => {
-        const repoElement = document.createElement('a');
+        let repoElement = document.createElement('a');
         repoElement.classList.add('repo');
         repoElement.href = repo.html_url;
         repoElement.target = '_blank';
@@ -55,11 +55,11 @@ const addRepos = (repos) => {
     });
 };
 
-const cardError = (error, defaultMessage) => {
-    const message = (error.response && error.response.status === 404)
+let cardError = (error, defaultMessage) => {
+    let message = (error.response && error.response.status === 404)
     ? defaultMessage
-    : 'An error occurred';
-    const createCardError = `
+    : 'Error 404: Not found';
+    let createCardError = `
         <div class="card">
       <h1>${message}</h1>
         </div>
@@ -69,7 +69,7 @@ const cardError = (error, defaultMessage) => {
 
 form.addEventListener('submit', (e) => {
     e.preventDefault();
-    const user = search.value.trim();
+    let user = search.value.trim();
   if (user) {
     getUser(user);
     search.value = '';
